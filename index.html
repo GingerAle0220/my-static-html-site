@@ -1,12 +1,165 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>My Static HTML Site</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Azure App Service CI/CD Demo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Azure Static Web Apps Demo</h1>
-    <p>Github Actionsからデプロイしています．</p>
+  <main class="container">
+    <h1>Azure App Service CI/CD Demo</h1>
+
+    <p class="description">
+      GitHub ActionsからAzure App Serviceへデプロイしています。<br>
+      このページでは，HTMLとCSSで作成した画面に，ブラウザ上で動作する簡易的な処理を追加しています。
+    </p>
+
+    <h2>マルバツゲーム</h2>
+
+    <p class="description">
+      プレイヤーは「○」，NPCは「×」です。空いているマスを選んでください。
+    </p>
+
+    <div id="status" class="status">あなたの番です。</div>
+
+    <div class="board">
+      <button class="cell" data-index="0"></button>
+      <button class="cell" data-index="1"></button>
+      <button class="cell" data-index="2"></button>
+      <button class="cell" data-index="3"></button>
+      <button class="cell" data-index="4"></button>
+      <button class="cell" data-index="5"></button>
+      <button class="cell" data-index="6"></button>
+      <button class="cell" data-index="7"></button>
+      <button class="cell" data-index="8"></button>
+    </div>
+
+    <button id="resetButton" class="reset-button">もう一度遊ぶ</button>
+
+    <p class="note">
+      ゲームの勝敗判定やNPCの手の選択は，サーバー側ではなくブラウザ上で実行されます。<br>
+      App Service側のserver.jsは，HTMLとCSSを配信するためだけに使用しています。
+    </p>
+  </main>
+
+  <script>
+    const cells = document.querySelectorAll(".cell");
+    const statusText = document.getElementById("status");
+    const resetButton = document.getElementById("resetButton");
+
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let gameOver = false;
+
+    const playerMark = "○";
+    const npcMark = "×";
+
+    const winPatterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    cells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        const index = Number(cell.dataset.index);
+
+        if (board[index] !== "" || gameOver) {
+          return;
+        }
+
+        playerMove(index);
+
+        if (!gameOver) {
+          setTimeout(npcMove, 500);
+        }
+      });
+    });
+
+    resetButton.addEventListener("click", resetGame);
+
+    function playerMove(index) {
+      board[index] = playerMark;
+      cells[index].textContent = playerMark;
+      cells[index].disabled = true;
+
+      if (checkWinner(playerMark)) {
+        statusText.textContent = "あなたの勝ちです！";
+        finishGame();
+        return;
+      }
+
+      if (isDraw()) {
+        statusText.textContent = "引き分けです。";
+        finishGame();
+        return;
+      }
+
+      statusText.textContent = "NPCの番です。";
+    }
+
+    function npcMove() {
+      const emptyCells = board
+        .map((value, index) => value === "" ? index : null)
+        .filter((index) => index !== null);
+
+      if (emptyCells.length === 0 || gameOver) {
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      const npcIndex = emptyCells[randomIndex];
+
+      board[npcIndex] = npcMark;
+      cells[npcIndex].textContent = npcMark;
+      cells[npcIndex].disabled = true;
+
+      if (checkWinner(npcMark)) {
+        statusText.textContent = "NPCの勝ちです。";
+        finishGame();
+        return;
+      }
+
+      if (isDraw()) {
+        statusText.textContent = "引き分けです。";
+        finishGame();
+        return;
+      }
+
+      statusText.textContent = "あなたの番です。";
+    }
+
+    function checkWinner(mark) {
+      return winPatterns.some((pattern) => {
+        return pattern.every((index) => board[index] === mark);
+      });
+    }
+
+    function isDraw() {
+      return board.every((cell) => cell !== "");
+    }
+
+    function finishGame() {
+      gameOver = true;
+      cells.forEach((cell) => {
+        cell.disabled = true;
+      });
+    }
+
+    function resetGame() {
+      board = ["", "", "", "", "", "", "", "", ""];
+      gameOver = false;
+      statusText.textContent = "あなたの番です。";
+
+      cells.forEach((cell) => {
+        cell.textContent = "";
+        cell.disabled = false;
+      });
+    }
+  </script>
 </body>
 </html>
