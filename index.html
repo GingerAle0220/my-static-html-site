@@ -10,17 +10,17 @@
     <h1>Azure App Service CI/CD Demo</h1>
 
     <p class="description">
-      GitHub ActionsからAzure App Serviceへデプロイしています。<br>
-      このページでは，HTMLとCSSで作成した画面に，ブラウザ上で動作する簡易的な処理を追加しています。
+      GitHub ActionsからAzure App Serviceへデプロイしています．<br>
+      このページでは，HTMLとCSSで作成した画面に，ブラウザ上で動作する簡易的な処理を追加しています．
     </p>
 
     <h2>マルバツゲーム</h2>
 
     <p class="description">
-      プレイヤーは「○」，NPCは「×」です。空いているマスを選んでください。
+      プレイヤーは「○」，NPCは「×」です．空いているマスを選んでください．
     </p>
 
-    <div id="status" class="status">あなたの番です。</div>
+    <div id="status" class="status">あなたの番です．</div>
 
     <div class="board">
       <button class="cell" data-index="0"></button>
@@ -35,11 +35,6 @@
     </div>
 
     <button id="resetButton" class="reset-button">もう一度遊ぶ</button>
-
-    <p class="note">
-      ゲームの勝敗判定やNPCの手の選択は，サーバー側ではなくブラウザ上で実行されます。<br>
-      App Service側のserver.jsは，HTMLとCSSを配信するためだけに使用しています。
-    </p>
   </main>
 
   <script>
@@ -94,12 +89,12 @@
       }
 
       if (isDraw()) {
-        statusText.textContent = "引き分けです。";
+        statusText.textContent = "引き分けです．";
         finishGame();
         return;
       }
 
-      statusText.textContent = "NPCの番です。";
+      statusText.textContent = "NPCの番です．";
     }
 
     function npcMove() {
@@ -119,18 +114,18 @@
       cells[npcIndex].disabled = true;
 
       if (checkWinner(npcMark)) {
-        statusText.textContent = "NPCの勝ちです。";
+        statusText.textContent = "NPCの勝ちです．";
         finishGame();
         return;
       }
 
       if (isDraw()) {
-        statusText.textContent = "引き分けです。";
+        statusText.textContent = "引き分けです．";
         finishGame();
         return;
       }
 
-      statusText.textContent = "あなたの番です。";
+      statusText.textContent = "あなたの番です．";
     }
 
     function checkWinner(mark) {
@@ -153,7 +148,7 @@
     function resetGame() {
       board = ["", "", "", "", "", "", "", "", ""];
       gameOver = false;
-      statusText.textContent = "あなたの番です。";
+      statusText.textContent = "あなたの番です．";
 
       cells.forEach((cell) => {
         cell.textContent = "";
