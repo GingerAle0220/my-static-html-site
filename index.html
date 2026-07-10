@@ -10,17 +10,16 @@
     <h1>Azure App Service CI/CD Demo</h1>
 
     <p class="description">
-      GitHub ActionsからAzure App Serviceへデプロイしています．<br>
-      このページでは，HTMLとCSSで作成した画面に，ブラウザ上で動作する簡易的な処理を追加しています．
+      GitHub ActionsからAzure App Serviceへデプロイしています．
     </p>
 
     <h2>マルバツゲーム</h2>
 
     <p class="description">
-      プレイヤーは「○」，NPCは「×」です．空いているマスを選んでください．
+      プレイヤーは「○」，NPCは「×」です．空いているマスを選んでね．
     </p>
 
-    <div id="status" class="status">あなたの番です．</div>
+    <div id="status" class="status">あなたの番です</div>
 
     <div class="board">
       <button class="cell" data-index="0"></button>
@@ -89,12 +88,12 @@
       }
 
       if (isDraw()) {
-        statusText.textContent = "引き分けです．";
+        statusText.textContent = "引き分けです";
         finishGame();
         return;
       }
 
-      statusText.textContent = "NPCの番です．";
+      statusText.textContent = "NPCの番です";
     }
 
     function npcMove() {
@@ -114,18 +113,18 @@
       cells[npcIndex].disabled = true;
 
       if (checkWinner(npcMark)) {
-        statusText.textContent = "NPCの勝ちです．";
+        statusText.textContent = "NPCの勝ちです";
         finishGame();
         return;
       }
 
       if (isDraw()) {
-        statusText.textContent = "引き分けです．";
+        statusText.textContent = "引き分けです";
         finishGame();
         return;
       }
 
-      statusText.textContent = "あなたの番です．";
+      statusText.textContent = "あなたの番です";
     }
 
     function checkWinner(mark) {
@@ -148,7 +147,7 @@
     function resetGame() {
       board = ["", "", "", "", "", "", "", "", ""];
       gameOver = false;
-      statusText.textContent = "あなたの番です．";
+      statusText.textContent = "あなたの番です";
 
       cells.forEach((cell) => {
         cell.textContent = "";
